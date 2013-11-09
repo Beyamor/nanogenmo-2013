@@ -5,20 +5,23 @@
    {:requirements
     {:characters
      {:hero
-      {:type :human}
+      {:tags #{:human}}
 
       :villain
-      {:type :monster}
+      {:tags #{:monster}}
 
       :damsel
-      {:type :human}
+      {:tags #{:human}}
 
       :parent-of-damsel
-      {:type :human}}
+      {:tags #{:human}}}
 
      :locations
-     {:start-location ["Town" "Castle"]
-      :lair-of-villain ["Cave" "Mountain" "Tower" "Maze"]}}
+     {:start-location
+      {:tags #{:human}}
+
+      :lair-of-villain
+      {:tags #{:monster}}}}
 
     :plot
     {:exposition

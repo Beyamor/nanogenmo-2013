@@ -1,17 +1,20 @@
 (ns genmo.plot
-  (:require [genmo.characters :as cs]))
+  (:require [genmo.characters :as cs]
+            [genmo.data.locations :as data.locations]))
 
 (defn set-up-characters
   [details characters]
   (into details
-        (for [[role constraints] characters]
-          [role (cs/create constraints)])))
+        (for [[role properties] characters]
+          [role (cs/create properties)])))
 
 (defn set-up-locations
   [details locations]
   (into details
-        (for [[location options] locations]
-          [location (rand-nth options)])))
+        (for [[detail properties] locations
+              :let [location (rand-nth
+                               (data.locations/satisfying (:tags properties)))]]
+          [detail location])))
 
 (defn set-up
   [{:keys [requirements]}]

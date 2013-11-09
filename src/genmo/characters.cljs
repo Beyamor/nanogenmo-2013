@@ -3,15 +3,24 @@
 
 (def any-gender #(rand-nth [:male :female]))
 
-(defmulti create :type)
+(def types #{:human :monster})
 
-(defmethod create :human
-  [constraints]
+(defmulti create-
+  #(->> % (filter types) first))
+
+(defmethod create- :human
+  [tags]
   (let [gender (any-gender)]
     {:gender gender
      :name (rand-nth (names/all gender))}))
 
-(defmethod create :monster
-  [constraints]
+(defmethod create- :monster
+  [tags]
   {:gender (any-gender)
    :name (rand-nth ["Dragon" "Minotaur" "Ogre" "Giant"])})
+
+(defn create
+  [{:keys [tags]}]
+  (merge
+    {:tags tags}
+    (create- tags)))
