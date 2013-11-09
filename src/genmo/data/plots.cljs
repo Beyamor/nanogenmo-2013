@@ -8,7 +8,7 @@
        {:type :human}]
 
       [:villain
-       {:type :human}]
+       {:type :monster}]
 
       [:damsel
        {:type :human}]]}
