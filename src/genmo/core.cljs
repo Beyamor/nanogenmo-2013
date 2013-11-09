@@ -1,6 +1,13 @@
 (ns genmo.core
-  (:use [jayq.core :only [$ text]])
-  (:require [genmo.story :as story]))
+  (:use [jayq.core :only [$ html]])
+  (:require [genmo.story :as story]
+            [genmo.write :as write]
+            [genmo.present :as present]))
 
-($ #(-> ($ :body)
-      (text (str (story/create)))))
+(->>
+  (story/create)
+  write/story
+  present/story
+  (html ($ :body))
+  (fn [])
+  $)
