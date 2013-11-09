@@ -1,16 +1,22 @@
 (ns genmo.write)
 
-(defn realize-section
-  [definition details]
-  (->>
-    (for [piece definition]
-      (cond
-        (string? piece)
-        piece
+(defn realize
+  [thing details]
+  (cond
+    (string? thing)
+    thing
 
-        (keyword? piece)
-        (get-in details [piece :name])))
-    (apply str)))
+    (keyword? thing)
+    (let [detail (get details thing)]
+      (if (map? detail)
+        (:name detail)
+        detail))
+
+    (vector? thing)
+    (-> thing
+      (->> (map #(realize % details)))
+      (->> (apply str))
+      (str "\n"))))
 
 (defn story
   [{:keys [plot details]}]
@@ -23,4 +29,4 @@
             :content
             (-> plot
               (get section)
-              (realize-section details))}))))
+              (realize details))}))))

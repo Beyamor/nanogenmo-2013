@@ -2,26 +2,36 @@
 
 (def all
   [; kidnapping
-   {:requires
+   {:requirements
     {:characters
-     [[:hero
-       {:type :human}]
+     {:hero
+      {:type :human}
 
-      [:villain
-       {:type :monster}]
+      :villain
+      {:type :monster}
 
-      [:damsel
-       {:type :human}]]}
+      :damsel
+      {:type :human}
+
+      :parent-of-damsel
+      {:type :human}}
+
+     :locations
+     {:start-location ["Town" "Castle"]
+      :lair-of-villain ["Cave" "Mountain" "Tower" "Maze"]}}
 
     :plot
     {:exposition
-     [:villain " kidnaps " :damsel]
+     [[:villain " kidnaps " :damsel]
+      [:hero " enters " :starting-location]
+      [:parent-of-damsel " explains to " :hero " that " :villain " kidnapped " :damsel]]
 
      :rising-action
-     [:hero " tracks down " :villain]
+     [:hero " tracks " :villain]
 
      :climax
-     [:hero " fights " :villain]
+     [[:hero " reaches " :lair-of-villain]
+      [:hero " fights " :villain]]
 
      :falling-action
      [:villain " is defeated"]
