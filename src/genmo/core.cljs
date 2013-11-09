@@ -4,10 +4,8 @@
             [genmo.write :as write]
             [genmo.present :as present]))
 
-(->>
-  (story/create)
-  write/story
-  present/story
-  (html ($ :body))
-  (fn [])
-  $)
+($ #(->>
+      (story/create)
+      write/story
+      present/story
+      (html ($ :body))))
