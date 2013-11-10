@@ -6,34 +6,48 @@
   [details characters]
   (into details
         (for [[role properties] characters]
-          [role (cs/create properties)])))
+          [role (cs/create (:tags properties))])))
 
-(defn location-constraints
-  [details properties]
-  (->>
-    (for [[property value] properties]
-      (case property
-        :tags
-        value
+(defmulti create-missing-detail (fn [_ [property _]] property))
 
-        :home-of
-        (let [character (get details value)]
-          (:tags character))))
-    (apply concat)
-    set))
+(defmethod create-missing-detail :parent-of
+  [details [_ child]]
+  (let [tags (get-in details [child :tags])]
+    (cs/create tags)))
 
-(defn set-up-locations
-  [details locations]
-  (into details
-        (for [[detail properties] locations
-              :let [location (->
-                               (location-constraints details properties)
-                               data.locations/satisfying
-                               rand-nth)]]
-          [detail location])))
+(defmethod create-missing-detail :home-of
+  [details [_ owner]]
+  (let [tags (get-in details [owner :tags])]
+    (rand-nth (data.locations/satisfying tags))))
+
+(defn add-missing-details
+  [details thing]
+  (cond
+    (string? thing)
+    details
+
+    (keyword? thing)
+    details
+
+    (vector? thing)
+    (reduce add-missing-details details thing)
+
+    (map? thing)
+    (let [descriptor (first thing)]
+      (if (contains? details descriptor)
+        details
+        (assoc details thing
+               (create-missing-detail details descriptor))))))
+
+(defn add-all-missing-details
+  [details sections]
+  (reduce
+    (fn [details [section definition]]
+      (add-missing-details details definition))
+    details sections))
 
 (defn set-up
-  [{:keys [requirements]}]
+  [{:keys [requirements sections]}]
   (-> {}
     (set-up-characters (:characters requirements))
-    (set-up-locations (:locations requirements))))
+    (add-all-missing-details sections)))

@@ -20,7 +20,7 @@
    :name (rand-nth ["Dragon" "Minotaur" "Ogre" "Giant"])})
 
 (defn create
-  [{:keys [tags]}]
+  [tags]
   (merge
     {:tags tags}
     (create- tags)))

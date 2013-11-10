@@ -6,7 +6,7 @@
     (string? thing)
     thing
 
-    (keyword? thing)
+    (or (map? thing) (keyword? thing))
     (let [detail (get details thing)]
       (if (map? detail)
         (:name detail)

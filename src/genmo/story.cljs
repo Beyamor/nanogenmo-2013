@@ -6,5 +6,5 @@
   []
   (let [the-plot (plots/any)]
     (->
-      {:plot (:plot the-plot)}
+      {:plot (:sections the-plot)}
       (assoc :details (plot/set-up the-plot)))))
