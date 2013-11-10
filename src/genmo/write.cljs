@@ -12,7 +12,7 @@
         (:name detail)
         detail))
 
-    (vector? thing)
+    (sequential? thing)
     (-> thing
       (->>
         (map #(realize % details))

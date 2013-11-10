@@ -41,7 +41,7 @@
       details
       (add-derived-detail details thing))
 
-    (vector? thing)
+    (sequential? thing)
     (reduce add-missing-details details thing)))
 
 (defn add-all-missing-details
