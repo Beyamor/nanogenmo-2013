@@ -8,17 +8,27 @@
         (for [[role tags] characters]
           [role (cs/create tags)])))
 
-(defmulti create-missing-detail (fn [_ [property _]] property))
+(defmulti create-missing-detail (fn [derivation _] derivation))
 
 (defmethod create-missing-detail :parent-of
-  [details [_ child]]
-  (let [tags (get-in details [child :tags])]
-    (cs/create tags)))
+  [_ child]
+  (cs/create (:tags child)))
 
 (defmethod create-missing-detail :home-of
-  [details [_ owner]]
-  (let [tags (get-in details [owner :tags])]
-    (rand-nth (data.locations/home-to tags))))
+  [_ owner]
+  (->> (:tags owner)
+    data.locations/home-to
+    rand-nth))
+
+(defn add-derived-detail
+  [details detail]
+  (let [detail-pieces (-> detail
+                     name
+                     (clojure.string/split #"-"))
+        source (->> detail-pieces last keyword details)
+        derivation (->> detail-pieces butlast (interpose "-") (apply str) keyword)]
+    (assoc details detail
+           (create-missing-detail derivation source))))
 
 (defn add-missing-details
   [details thing]
@@ -27,17 +37,12 @@
     details
 
     (keyword? thing)
-    details
+    (if (contains? details thing)
+      details
+      (add-derived-detail details thing))
 
     (vector? thing)
-    (reduce add-missing-details details thing)
-
-    (map? thing)
-    (let [descriptor (first thing)]
-      (if (contains? details descriptor)
-        details
-        (assoc details thing
-               (create-missing-detail details descriptor))))))
+    (reduce add-missing-details details thing)))
 
 (defn add-all-missing-details
   [details sections]
