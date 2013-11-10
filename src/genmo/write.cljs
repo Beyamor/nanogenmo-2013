@@ -14,8 +14,10 @@
 
     (vector? thing)
     (-> thing
-      (->> (map #(realize % details)))
-      (->> (apply str))
+      (->>
+        (map #(realize % details))
+        (interpose " ")
+        (apply str))
       (str "\n"))))
 
 (defn story
