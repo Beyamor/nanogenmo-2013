@@ -1,45 +1,49 @@
 (ns genmo.data.plots)
 
+(defn fight
+  [{:keys [winner participants]}]
+  (let [[guy1 guy2] participants
+        loser       (-> participants set (disj winner) first)]
+    (for [i (-> 2 (+ (rand-int 3)) range)
+          :let [[from to] (if (< (rand) 0.5)
+                            [guy1 guy2]
+                            [guy2 guy1])]]
+      [from #{"hit" "smacked" "whacked"} to])
+    [winner "deals" loser "a" #{"mighty" "powerful" "fierce"} #{"blow" "strike"} ", defeating" loser]))
+
 (def all
   [; kidnapping
-   {:requirements
-    {:characters
-     {:hero
-      #{:human}
+   {:characters
+    {:hero
+     #{:human}
 
-      :villain
-      #{:monster}
+     :villain
+     #{:monster}
 
-      :damsel
-      #{:human :royal}}}
+     :damsel
+     #{:human :royal}}
 
-    :sections
-    {:exposition
-     [[:villain "kidnaps" :damsel]
-      [:hero "enters" :home-of-damsel]
-      [:parent-of-damsel"explains to" :hero "that" :villain "kidnapped" :damsel]]
+    :events
+    [{:name         "Kidnapping Introduction"
+      :setting      {:location :home-of-damsel}
+      :characters   [:hero :parent-of-damsel]
+      :description  [[:hero "enters" :home-of-damsel]
+                     [:parent-of-damsel"explains to" :hero "that" :villain "kidnapped" :damsel]]}
 
-     :rising-action
-     [:hero "tracks" :villain]
+     {:name         "Kidnapping Fight"
+      :setting      {:location :home-of-villain}
+      :characters   [:hero :villain]
+      :description  [[:hero "reaches" :home-of-villain]
+                     [:hero "fights" :villain]
+                     (fight
+                       {:participants [:hero :villain]
+                        :winner       :hero})]}
 
-     :climax
-     [[:hero "reaches" :home-of-villain]
-      [:hero "fights" :villain "!"]
-      (for [i (range (+ 2 (rand-int 3)))
-            :let [[from to] (if (< (rand) 0.5)
-                              [:hero :villain]
-                              [:villain :hero])]]
-        [from "hits" to])
-      [:hero "deals" :villain "a" #{"mighty" "great" "powerful"} #{"blow" "hit" "strike"}]]
-
-     :falling-action
-     [:villain "is defeated"]
-
-     :denoument
-     [[:hero "carries" :damsel "out of" :home-of-villain]
-      [:hero "returns to" :home-of-damsel]
-      [:parent-of-damsel "thanks" :hero]
-      [:hero "and" :damsel "live happily ever after"]]}}])
+     {:name         "Kidnapping Rescue"
+      :setting      {:location :home-of-damsel}
+      :characters   [:hero :damsel :parent-of-damsel]
+      :description  [[:parent-of-damsel "thanks" :hero]
+                     [:hero "and" :damsel "live happily ever after"]]}]}])
 
 (defn any
   []

@@ -23,8 +23,8 @@
 (defn add-derived-detail
   [details detail]
   (let [detail-pieces (-> detail
-                     name
-                     (clojure.string/split #"-"))
+                        name
+                        (clojure.string/split #"-"))
         source (->> detail-pieces last keyword details)
         derivation (->> detail-pieces butlast (interpose "-") (apply str) keyword)]
     (assoc details detail
@@ -47,15 +47,29 @@
     (set? thing)
     details))
 
-(defn add-all-missing-details
-  [details sections]
-  (reduce
-    (fn [details [section definition]]
-      (add-missing-details details definition))
-    details sections))
+(defn add-character-details
+  [details characters]
+  (reduce add-missing-details
+          details characters))
+
+(defn add-setting-details
+  [details setting]
+  (reduce add-missing-details
+          details (map setting [:location])))
+
+(defn add-event-details
+  [details {:as event :keys [characters setting]}]
+  (-> details
+    (add-setting-details setting)
+    (add-character-details characters)))
+
+(defn add-details-for-events
+  [details events]
+  (let [events (reverse events)]
+    (reduce add-event-details details events)))
 
 (defn set-up
-  [{:keys [requirements sections]}]
+  [{:keys [characters events]}]
   (-> {}
-    (set-up-characters (:characters requirements))
-    (add-all-missing-details sections)))
+    (set-up-characters characters)
+    (add-details-for-events events)))

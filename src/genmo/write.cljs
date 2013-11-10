@@ -22,14 +22,10 @@
     (-> thing vec rand-nth))) 
 
 (defn story
-  [{:keys [plot details]}]
-  (->>
-    [:exposition :rising-action :climax :falling-action :denoument]
-    (map (fn [section]
-           {:section
-            section
+  [{:keys [details events]}]
+  (for [{:keys [name description]} events]
+    {:section
+     name
 
-            :content
-            (-> plot
-              (get section)
-              (realize details))}))))
+     :content
+     (realize description details)}))

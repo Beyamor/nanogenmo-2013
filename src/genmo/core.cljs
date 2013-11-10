@@ -4,6 +4,14 @@
             [genmo.write :as write]
             [genmo.present :as present]))
 
+(set! *print-fn*
+      (fn [& args]
+        (->> args
+          (map str)
+          (interpose " ")
+          (apply str)
+          (.log js/console))))
+
 ($ #(->>
       (story/create)
       write/story
