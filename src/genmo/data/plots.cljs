@@ -24,7 +24,13 @@
 
      :climax
      [[:hero "reaches" :home-of-villain]
-      [:hero "fights" :villain]]
+      [:hero "fights" :villain "!"]
+      (for [i (range (+ 2 (rand-int 3)))
+            :let [[from to] (if (< (rand) 0.5)
+                              [:hero :villain]
+                              [:villain :hero])]]
+        [from "hits" to])
+      [:hero "deals" :villain "a mighty blow"]]
 
      :falling-action
      [:villain "is defeated"]
