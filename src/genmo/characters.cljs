@@ -17,7 +17,7 @@
 (defmethod create- :monster
   [tags]
   {:gender (any-gender)
-   :name (rand-nth ["Dragon" "Minotaur" "Ogre" "Giant"])})
+   :term (rand-nth ["dragon" "minotaur" "ogre" "giant"])})
 
 (defn create
   [tags]

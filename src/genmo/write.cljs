@@ -1,4 +1,5 @@
-(ns genmo.write)
+(ns genmo.write
+  (:require [genmo.lang :as lang]))
 
 (defn realize
   [thing details]
@@ -6,11 +7,8 @@
     (string? thing)
     thing
 
-    (or (map? thing) (keyword? thing))
-    (let [detail (get details thing)]
-      (if (map? detail)
-        (:name detail)
-        detail))
+    (keyword? thing)
+    (lang/refer-to (get details thing))
 
     (sequential? thing)
     (-> thing
