@@ -18,7 +18,10 @@
         (map #(realize % details))
         (interpose " ")
         (apply str))
-      (str "\n"))))
+      (str "\n"))
+
+    (set? thing)
+    (-> thing vec rand-nth))) 
 
 (defn story
   [{:keys [plot details]}]

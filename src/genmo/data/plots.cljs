@@ -30,7 +30,7 @@
                               [:hero :villain]
                               [:villain :hero])]]
         [from "hits" to])
-      [:hero "deals" :villain "a mighty blow"]]
+      [:hero "deals" :villain "a" #{"mighty" "great" "powerful"} #{"blow" "hit" "strike"}]]
 
      :falling-action
      [:villain "is defeated"]

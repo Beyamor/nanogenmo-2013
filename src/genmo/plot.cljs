@@ -42,7 +42,10 @@
       (add-derived-detail details thing))
 
     (sequential? thing)
-    (reduce add-missing-details details thing)))
+    (reduce add-missing-details details thing)
+
+    (set? thing)
+    details))
 
 (defn add-all-missing-details
   [details sections]
