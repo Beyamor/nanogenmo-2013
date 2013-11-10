@@ -42,7 +42,8 @@
      [:villain "is defeated"]
 
      :denoument
-     [:hero "and" :damsel "live happily ever after"]}}])
+     [[:hero "carries" :damsel "out of" :lair-of-villain]
+       [:hero "and" :damsel "live happily ever after"]]}}])
 
 (defn any
   []
