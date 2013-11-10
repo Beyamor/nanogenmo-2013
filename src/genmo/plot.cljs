@@ -8,12 +8,28 @@
         (for [[role properties] characters]
           [role (cs/create properties)])))
 
+(defn location-constraints
+  [details properties]
+  (->>
+    (for [[property value] properties]
+      (case property
+        :tags
+        value
+
+        :home-of
+        (let [character (get details value)]
+          (:tags character))))
+    (apply concat)
+    set))
+
 (defn set-up-locations
   [details locations]
   (into details
         (for [[detail properties] locations
-              :let [location (rand-nth
-                               (data.locations/satisfying (:tags properties)))]]
+              :let [location (->
+                               (location-constraints details properties)
+                               data.locations/satisfying
+                               rand-nth)]]
           [detail location])))
 
 (defn set-up

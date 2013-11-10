@@ -1,5 +1,5 @@
 (ns genmo.data.locations
-  (:require [cljs.core.set :as s]))
+  (:require [clojure.set :as s]))
 
 (def all
   {"Palace"
@@ -18,5 +18,5 @@
   [tags]
   (->> all
     (filter (fn [[_ v]]
-              (= tags v)))
+              (s/superset? v tags)))
     (map first)))

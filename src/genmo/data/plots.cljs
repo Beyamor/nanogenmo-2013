@@ -17,11 +17,11 @@
       {:tags #{:human}}}
 
      :locations
-     {:start-location
-      {:tags #{:human}}
+     {:starting-location
+      {:home-of :damsel}
 
       :lair-of-villain
-      {:tags #{:monster}}}}
+      {:home-of :villain}}}
 
     :plot
     {:exposition
