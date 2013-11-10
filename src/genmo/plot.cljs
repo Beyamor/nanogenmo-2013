@@ -18,7 +18,7 @@
 (defmethod create-missing-detail :home-of
   [details [_ owner]]
   (let [tags (get-in details [owner :tags])]
-    (rand-nth (data.locations/satisfying tags))))
+    (rand-nth (data.locations/home-to tags))))
 
 (defn add-missing-details
   [details thing]

@@ -2,24 +2,24 @@
   (:require [clojure.set :as s]))
 
 (def all
-  {"Town"
-   #{:human}
+  {"town"
+   {:home-to #{:human}}
    
-   "Palace"
-   #{:human :royal}
+   "palace"
+   {:home-to #{:human :royal}}
 
-   "Castle"
-   #{:human :royal}
+   "castle"
+   {:home-to #{:human :royal}}
 
-   "Cave"
-   #{:monster}
+   "cave"
+   {:home-to #{:monster}}
 
-   "Swamp"
-   #{:monster}})
+   "swamp"
+   {:home-to #{:monster}}})
 
-(defn satisfying
+(defn home-to
   [tags]
   (->> all
-    (filter (fn [[_ v]]
-              (s/superset? v tags)))
+    (filter (fn [[_ {:keys [home-to]}]]
+              (s/superset? home-to tags)))
     (map first)))
