@@ -5,8 +5,8 @@
 (defn set-up-characters
   [details characters]
   (into details
-        (for [[role properties] characters]
-          [role (cs/create (:tags properties))])))
+        (for [[role tags] characters]
+          [role (cs/create tags)])))
 
 (defmulti create-missing-detail (fn [_ [property _]] property))
 

@@ -5,19 +5,18 @@
    {:requirements
     {:characters
      {:hero
-      {:tags #{:human}}
+      #{:human}
 
       :villain
-      {:tags #{:monster}}
+      #{:monster}
 
       :damsel
-      {:tags #{:human
-               :royal}}}}
+      #{:human :royal}}}
 
     :sections
     {:exposition
      [[:villain "kidnaps" :damsel]
-      [:hero "enters" :starting-location]
+      [:hero "enters" {:home-of :damsel}]
       [{:parent-of :damsel} "explains to" :hero "that" :villain "kidnapped" :damsel]]
 
      :rising-action
@@ -32,6 +31,7 @@
 
      :denoument
      [[:hero "carries" :damsel "out of" {:home-of :villain}]
+      [:hero "returns to" {:home-of :damsel}]
       [{:parent-of :damsel} "thanks" :hero]
       [:hero "and" :damsel "live happily ever after"]]}}])
 
