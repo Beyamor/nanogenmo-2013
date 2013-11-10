@@ -1,4 +1,5 @@
-(ns genmo.data.plots)
+(ns genmo.data.plots
+  (:require [clojure.set :as s]))
 
 (defn fight
   [{:keys [winner participants]}]
@@ -26,13 +27,15 @@
     :events
     [{:name         "Kidnapping Introduction"
       :setting      {:location :home-of-damsel}
-      :characters   [:hero :parent-of-damsel]
+      :characters   #{:hero :parent-of-damsel}
       :description  [[:hero "enters" :home-of-damsel]
                      [:parent-of-damsel"explains to" :hero "that" :villain "kidnapped" :damsel]]}
 
      {:name         "Kidnapping Fight"
       :setting      {:location :home-of-villain}
-      :characters   [:hero :villain]
+      :characters   #{:hero :villain}
+      :requires     [{:condition  :at-location
+                      :who        :hero}]
       :description  [[:hero "reaches" :home-of-villain]
                      [:hero "fights" :villain]
                      (fight
@@ -41,7 +44,9 @@
 
      {:name         "Kidnapping Rescue"
       :setting      {:location :home-of-damsel}
-      :characters   [:hero :damsel :parent-of-damsel]
+      :characters   #{:hero :damsel :parent-of-damsel}
+      :requires     [{:condition :at-location
+                      :who       [:hero :damsel]}]
       :description  [[:parent-of-damsel "thanks" :hero]
                      [:hero "and" :damsel "live happily ever after"]]}]}])
 

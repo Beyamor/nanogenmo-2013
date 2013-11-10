@@ -4,7 +4,5 @@
 
 (defn create
   []
-  (let [the-plot (plots/any)]
-    (->
-      {:events (:events the-plot)}
-      (assoc :details (plot/set-up the-plot)))))
+  (-> (plots/any)
+    (plot/set-up)))
