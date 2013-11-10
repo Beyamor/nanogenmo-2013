@@ -11,10 +11,12 @@
       {:tags #{:monster}}
 
       :damsel
-      {:tags #{:human}}
+      {:tags #{:human
+               :royal}}
 
       :parent-of-damsel
-      {:tags #{:human}}}
+      {:tags #{:human
+               :royal}}}
 
      :locations
      {:starting-location

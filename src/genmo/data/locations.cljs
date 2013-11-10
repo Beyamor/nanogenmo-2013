@@ -2,8 +2,11 @@
   (:require [clojure.set :as s]))
 
 (def all
-  {"Palace"
+  {"Town"
    #{:human}
+   
+   "Palace"
+   #{:human :royal}
 
    "Castle"
    #{:human :royal}
