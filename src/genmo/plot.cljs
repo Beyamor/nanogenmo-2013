@@ -1,5 +1,6 @@
 (ns genmo.plot
-  (:use [genmo.util :only [insertv]])
+  (:use [genmo.util :only [insertv]]
+        [genmo.text :only [sen par]])
   (:require [genmo.characters :as cs]
             [genmo.data.locations :as data.locations]))
 
@@ -96,13 +97,11 @@
   [{:keys [who]} {{:keys [location]} :setting}]
   (let [people? (not (keyword? who))]
     {:name              "Travel"
-     :description       [(if people?
-                           (interpose "and" who)
-                           who)
-                         (if people?
-                           "travel to"
-                           "travels to")
-                         location]
+     :description       [(par
+                           (sen
+                             (if people? (interpose " and " who) who)
+                             (if people? "travel to" "travels to")
+                             location))]
      :resulting-location location}))
 
 (defn event-requirement-state
