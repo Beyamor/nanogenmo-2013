@@ -11,6 +11,20 @@
         [s]))
     flatten-1))
 
+(defn starts-with-punct?
+  [thing]
+  (re-matches #"[.!?,;].*" thing))
+
+(defn add-sentence-spaces
+  [[first-bit & more-bits]]
+  (->>
+    (for [bit more-bits]
+      (if (starts-with-punct? bit)
+        [bit]
+        [" " bit]))
+    flatten-1
+    (cons first-bit)))
+
 (defn realize
   [thing details]
   (cond
@@ -32,7 +46,7 @@
         (->> content
           (filter identity)
           (map #(realize % details))
-          (interpose " ")
+          add-sentence-spaces
           (apply str))
 
         :paragraph
