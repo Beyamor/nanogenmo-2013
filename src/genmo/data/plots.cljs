@@ -16,7 +16,7 @@
             from #{"hit" "smacked" "whacked"} to)))
       (par
         (sen
-          winner "deals" loser "a" #{"mighty" "powerful" "fierce"} #{"blow" "strike"} ", defeating" loser)))))
+          winner "dealt" loser "a" #{"mighty" "powerful" "fierce"} #{"blow" "strike"} ", defeating" loser)))))
 
 (def all
   [; kidnapping
@@ -36,10 +36,10 @@
       :characters   #{:hero :parent-of-damsel}
       :description  [(par
                         (sen
-                          :hero "enters" :home-of-damsel))
+                          :hero "entered" :home-of-damsel))
                       (par
                         (sen
-                          :parent-of-damsel"explains to" :hero "that" :villain "kidnapped" :damsel))]}
+                          :parent-of-damsel "explained to" :hero "that" :villain "kidnapped" :damsel))]}
 
      {:name         "Kidnapping Fight"
       :setting      {:location :home-of-villain}
@@ -48,10 +48,10 @@
                       :who        :hero}]
       :description  [(par
                       (sen
-                        :hero "reaches" :home-of-villain))
+                        :hero "reached" :home-of-villain))
                      (par
                        (sen
-                         :hero "fights" :villain))
+                         :hero "fought" :villain))
                      (fight
                        {:participants [:hero :villain]
                         :winner       :hero})]}
@@ -63,8 +63,8 @@
                       :who       [:hero :damsel]}]
       :description  [(par
                        (sens
-                         [:parent-of-damsel "thanks" :hero]
-                         [:hero "and" :damsel "live happily ever after"]))]}]}])
+                         [:parent-of-damsel "thanked" :hero]
+                         [:hero "and" :damsel "lived happily ever after"]))]}]}])
 
 (defn any
   []

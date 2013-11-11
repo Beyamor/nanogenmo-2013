@@ -100,7 +100,7 @@
      :description       [(par
                            (sen
                              (if people? (interpose " and " who) who)
-                             (if people? "travel to" "travels to")
+                             "travelled to"
                              location))]
      :resulting-location location}))
 

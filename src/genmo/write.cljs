@@ -15,6 +15,10 @@
   [thing]
   (re-matches #"[.!?,;].*" thing))
 
+(defn ends-with-punct?
+  [thing]
+  (re-matches #".*[.!?,;]" thing))
+
 (defn add-sentence-spaces
   [[first-bit & more-bits]]
   (->>
@@ -24,6 +28,12 @@
         [" " bit]))
     flatten-1
     (cons first-bit)))
+
+(defn add-trailing-punctuation
+  [sentence]
+  (if (ends-with-punct? sentence)
+    sentence
+    (str sentence ".")))
 
 (defn realize
   [thing details]
@@ -47,7 +57,8 @@
           (filter identity)
           (map #(realize % details))
           add-sentence-spaces
-          (apply str))
+          (apply str)
+          add-trailing-punctuation)
 
         :paragraph
         (-> content
