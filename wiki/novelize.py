@@ -62,7 +62,7 @@ with open("authors") as authors_file:
 
 novel		= []
 novel_length	= 0
-while novel_length < 500:
+while novel_length < 5000:
 	link			= choice(author_links)
 	soup			= BeautifulSoup(urllib2.urlopen("http://en.wikipedia.org" + link).read().decode("utf-8"))
 	content			= soup.find(id="mw-content-text")
@@ -86,7 +86,9 @@ while novel_length < 500:
 			for content in sentences:
 				content	= re.sub("\[\d+\]", "", content)
 				content	= re.sub("\(.*?\)", "", content)
+				content	= re.sub("\[citation needed\]", "", content)
 				content	= re.sub(" +", " ", content)
+				content	= re.sub(" ,", ",", content)
 				content	= content.strip()
 
 				if len(content) > 0:
