@@ -6,6 +6,12 @@ import nltk
 import time
 import datetime
 import sys
+import optparse
+
+opts_parser = optparse.OptionParser()
+opts_parser.add_option("-w", "--words", dest="desired_length", type="int", default=500)
+opts_parser.add_option("-f", "--f", dest="novel_name")
+(options, _) = opts_parser.parse_args()
 
 def constantly(value):
 	def f(**kwargs):
@@ -63,11 +69,7 @@ with open("authors") as authors_file:
 
 novel		= []
 novel_length	= 0
-desired_length	= 500
-if len(sys.argv) > 1:
-	desired_length = int(sys.argv[1])
-
-while novel_length < desired_length:
+while novel_length < options.desired_length:
 	link			= choice(author_links)
 	soup			= BeautifulSoup(urllib2.urlopen("http://en.wikipedia.org" + link).read().decode("utf-8"))
 	content			= soup.find(id="mw-content-text")
@@ -134,8 +136,12 @@ while novel_length < desired_length:
 		# wikipedia doesn't have a rate limit, but hey, let's not push it
 		time.sleep(0.01)
 
+if options.novel_name is not None:
+	novel_name = options.novel_name
+else:
+	novel_name = "novel-" + datetime.datetime.now().strftime("%A-%d-%B-%Y-%I:%M%p")
+
 ordered_novel		= sorted(novel, key=lambda sentence: sentence["order"])
-novel_name		= "novel-" + datetime.datetime.now().strftime("%A-%d-%B-%Y-%I:%M%p")
 continuing_sentence	= r"(He|She|His|Her).*"
 is_first_sentence	= True
 with open(novel_name, "w") as novel:
