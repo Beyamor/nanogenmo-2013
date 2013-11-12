@@ -75,6 +75,7 @@ for content_item in content.children:
 		sentences = nltk.tokenize.sent_tokenize(content_item.get_text())
 		for sentence in sentences:
 			sentence_without_citations	= re.sub("\[\d+\]", "", sentence)
+			sentence_without_parens		= re.sub("\(.*?\)", "", sentence_without_citations)
 			stripped_sentence		= sentence_without_citations.strip()
 
 			if len(stripped_sentence) > 0:
