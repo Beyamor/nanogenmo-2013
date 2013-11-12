@@ -4,20 +4,19 @@ import urllib2
 import re
 import nltk
 
-INTERESTING_SECTIONS_TERMS = {"life", "death", "biography"}
+INTERESTING_SECTIONS_TERMS = {"no-section", "life", "death", "biography"}
 
 author_links = []
 with open("authors", "r") as authors_file:
 	for link in authors_file.read().split("\n"):
 		author_links.append("http://en.wikipedia.org" + link)
 
-#link		= choice(author_links)
-link		= "http://en.wikipedia.org/wiki/Brian_Moore_(novelist)"
+link		= choice(author_links)
 soup		= BeautifulSoup(urllib2.urlopen(link))
 content		= soup.find(id="mw-content-text")
 
 section_content	= {}
-current_section	= None
+current_section	= "no-section"
 for content_item in content.children:
 	if content_item.name == "h2":
 		section_heading = content_item.find(class_="mw-headline")
@@ -47,4 +46,7 @@ for section, content in section_content.items():
 		for sentence in content:
 			interesting_content.append(sentence)
 
-print choice(interesting_content)
+if len(interesting_content) is not 0:
+	print choice(interesting_content)
+else:
+	print "No interesting content for " + link
