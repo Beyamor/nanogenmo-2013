@@ -5,6 +5,7 @@ import re
 import nltk
 import time
 import datetime
+import sys
 
 def constantly(value):
 	def f(**kwargs):
@@ -62,7 +63,11 @@ with open("authors") as authors_file:
 
 novel		= []
 novel_length	= 0
-while novel_length < 5000:
+desired_length	= 500
+if len(sys.argv) > 1:
+	desired_length = int(sys.argv[1])
+
+while novel_length < desired_length:
 	link			= choice(author_links)
 	soup			= BeautifulSoup(urllib2.urlopen("http://en.wikipedia.org" + link).read().decode("utf-8"))
 	content			= soup.find(id="mw-content-text")
@@ -84,12 +89,14 @@ while novel_length < 5000:
 
 			sentences = nltk.tokenize.sent_tokenize(content_item.get_text())
 			for content in sentences:
-				content	= re.sub("\[\d+\]", "", content)
-				content	= re.sub("\(.*?\)", "", content)
-				content	= re.sub("\[citation needed\]", "", content)
-				content	= re.sub(" +", " ", content)
-				content	= re.sub(" ,", ",", content)
-				content	= re.sub(" \.", ".", content)
+				content	= re.sub(r"\[\d+\]", "", content)
+				content	= re.sub(r"\(.*?\)", "", content)
+				content	= re.sub(r"\[citation needed\]", "", content)
+				content	= re.sub(r" +", " ", content)
+				content	= re.sub(r" ,", ",", content)
+				content	= re.sub(r" \.", ".", content)
+				content	= re.sub(r",+", ",", content)
+				content	= re.sub(r" +cit\.", "", content)
 				content	= content.strip()
 
 				if len(content) > 0:
@@ -120,11 +127,12 @@ while novel_length < 5000:
 
 	if len(interesting_content) is not 0:
 		sentence	= choice(interesting_content)
-		novel_length	= novel_length + len(sentence["content"])
+		number_of_words	= sentence["content"].count(" ") # whatevs, close enough
+		novel_length	= novel_length + number_of_words
 		novel.append(sentence)
 
-		# wikipedia doesn't have a rate limit, but whatever, let's do 'em a solid
-		time.sleep(0.1)
+		# wikipedia doesn't have a rate limit, but hey, let's not push it
+		time.sleep(0.01)
 
 ordered_novel		= sorted(novel, key=lambda sentence: sentence["order"])
 novel_name		= "novel-" + datetime.datetime.now().strftime("%A-%d-%B-%Y-%I:%M%p")
