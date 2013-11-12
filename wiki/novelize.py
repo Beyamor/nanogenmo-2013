@@ -129,7 +129,7 @@ while novel_length < options.desired_length:
 
 	if len(interesting_content) is not 0:
 		sentence	= choice(interesting_content)
-		number_of_words	= sentence["content"].count(" ") # whatevs, close enough
+		number_of_words	= sentence["content"].count(" ") + 1 # whatevs, close enough
 		novel_length	= novel_length + number_of_words
 		novel.append(sentence)
 
