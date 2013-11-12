@@ -89,6 +89,7 @@ while novel_length < 5000:
 				content	= re.sub("\[citation needed\]", "", content)
 				content	= re.sub(" +", " ", content)
 				content	= re.sub(" ,", ",", content)
+				content	= re.sub(" \.", ".", content)
 				content	= content.strip()
 
 				if len(content) > 0:
