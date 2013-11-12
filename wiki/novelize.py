@@ -4,7 +4,21 @@ import urllib2
 import re
 import nltk
 
-INTERESTING_SECTIONS_TERMS = {"no-section", "life", "death", "biography"}
+INTERESTING_SECTIONS_TERMS = {
+	"life",
+	"death",
+	"biography"
+}
+
+def is_interesting_section(section):
+	if not section:
+		return True
+
+	canonical_section = section.lower()
+	for term in INTERESTING_SECTIONS_TERMS:
+		if term in canonical_section:
+			return True
+	return False
 
 author_links = []
 with open("authors", "r") as authors_file:
@@ -15,8 +29,9 @@ link		= choice(author_links)
 soup		= BeautifulSoup(urllib2.urlopen(link))
 content		= soup.find(id="mw-content-text")
 
-section_content	= {}
-current_section	= "no-section"
+section_content		= {}
+current_section		= None
+interesting_content	= []
 for content_item in content.children:
 	if content_item.name == "h2":
 		section_heading = content_item.find(class_="mw-headline")
@@ -24,27 +39,10 @@ for content_item in content.children:
 		if section_heading:
 			current_section = section_heading.get_text()
 
-	elif content_item.name == "p" and current_section:
-		if current_section not in section_content:
-			section_content[current_section] = []
-		content = section_content[current_section]
-
+	elif content_item.name == "p" and is_interesting_section(current_section):
 		for sentence in nltk.tokenize.sent_tokenize(content_item.get_text()):
 			sentence_without_citations = re.sub("\[\d+\]", "", sentence)
-			content.append(sentence_without_citations)
-
-interesting_content = []
-for section, content in section_content.items():
-	canonical_section	= section.lower()
-	is_interesting		= False
-	for term in INTERESTING_SECTIONS_TERMS:
-		if term in canonical_section:
-			is_interesting = True
-			break
-
-	if is_interesting:
-		for sentence in content:
-			interesting_content.append(sentence)
+			interesting_content.append(sentence_without_citations)
 
 if len(interesting_content) is not 0:
 	print choice(interesting_content)
