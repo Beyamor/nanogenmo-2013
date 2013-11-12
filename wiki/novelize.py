@@ -4,6 +4,7 @@ import urllib2
 import re
 import nltk
 import time
+import datetime
 
 def constantly(value):
 	def f(**kwargs):
@@ -77,7 +78,7 @@ while novel_length < 500:
 			for sentence in sentences:
 				sentence_without_citations	= re.sub("\[\d+\]", "", sentence)
 				sentence_without_parens		= re.sub("\(.*?\)", "", sentence_without_citations)
-				stripped_sentence		= sentence_without_citations.strip()
+				stripped_sentence		= sentence_without_parens.strip()
 
 				if len(stripped_sentence) > 0:
 					exiting_sentences.append(stripped_sentence)
@@ -102,6 +103,8 @@ while novel_length < 500:
 		# wikipedia doesn't have a rate limit, but whatever, let's do 'em a solid
 		time.sleep(0.1)
 
-ordered_novel = sorted(novel, key=lambda whatever: whatever[1])
-for (sentence, _) in ordered_novel:
-	print sentence
+ordered_novel	= sorted(novel, key=lambda whatever: whatever[1])
+novel_name	= "novel-" + datetime.datetime.now().strftime("%A-%d-%B-%Y-%I:%M%p")
+with open(novel_name, "w") as novel:
+	for (sentence, _) in ordered_novel:
+		novel.write((sentence + "\n").encode("utf8"))
