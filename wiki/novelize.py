@@ -28,9 +28,11 @@ for content_item in content.children:
 	elif content_item.name == "p" and current_section:
 		if current_section not in section_content:
 			section_content[current_section] = []
+		content = section_content[current_section]
 
 		for sentence in nltk.tokenize.sent_tokenize(content_item.get_text()):
-			section_content[current_section].append(sentence)
+			sentence_without_citations = re.sub("\[\d+\]", "", sentence)
+			content.append(sentence_without_citations)
 
 interesting_content = []
 for section, content in section_content.items():
