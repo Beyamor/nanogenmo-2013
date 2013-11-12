@@ -96,5 +96,3 @@ for section, sentences in section_sentences.items():
 
 if len(interesting_content) is not 0:
 	print choice(interesting_content)
-else:
-	print "No interesting content for " + link
